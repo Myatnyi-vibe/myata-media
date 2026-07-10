@@ -198,7 +198,7 @@
   }
 
   /* ── ЛЁГКИЙ ПАРАЛЛАКС ФОТО ── */
-  var parallaxImgs = document.querySelectorAll(".aphoto img, .strip__item img");
+  var parallaxImgs = document.querySelectorAll(".aphoto img, .strip__item img, .channel__photo img");
   var pTicking = false;
   function parallaxTick() {
     parallaxImgs.forEach(function (img) {

@@ -469,22 +469,28 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   display: grid;
   grid-template-columns: 7fr 5fr;
   gap: clamp(2rem, 4vw, 4rem);
-  align-items: start; /* верхи колонок на одной линии */
+  align-items: stretch; /* колонки заканчиваются на одной линии */
 }
-.audience__photos { min-width: 0; }
-.audience__photos .aphoto { margin-bottom: clamp(10px, 1.4vw, 22px); }
-.audience__photos .aphoto:last-child { margin-bottom: 0; }
 .audience__media > * { min-width: 0; }
 .audience__interests {
   border-top: 1px solid var(--line2);
   padding-top: 1.4rem;
+  display: flex;
+  flex-direction: column;
 }
 .aphoto {
   position: relative;
   overflow: clip;
   aspect-ratio: 3 / 2;
 }
-.aphoto--sub { aspect-ratio: 21 / 9; }
+.aphoto--main { aspect-ratio: 4 / 3; }
+/* фото-заполнитель: добирает свободную высоту колонки до общей нижней линии */
+.aphoto--fill {
+  aspect-ratio: auto;
+  flex: 1 1 auto;
+  min-height: 180px;
+  margin-top: 2rem;
+}
 /* фото абсолютом: картинка в потоке ломает высоту грид-ряда (aspect-ratio vs естественная высота img) */
 .aphoto img {
   position: absolute;
@@ -533,11 +539,42 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(2.5rem, 5vw, 5.5rem);
-  align-items: start; /* текст и визуал начинаются на одном уровне */
+  align-items: stretch; /* обе колонки — от общей верхней до общей нижней линии */
   padding: clamp(2.5rem, 5vw, 4.5rem) 0;
   border-top: 1px solid var(--line);
 }
-.channel__visual { min-width: 0; }
+.channel__visual {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.channel__stats {
+  margin-top: auto; /* прижимаем к низу колонки — нижние линии совпадают */
+  padding-top: 1.8rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+  border-top: 1px solid var(--line2);
+}
+.channel__info { display: flex; flex-direction: column; }
+.channel__info .channel__stats { margin-top: auto; }
+.channel__stats b {
+  display: block;
+  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+  font-weight: 560;
+  line-height: 1;
+  color: var(--mint2);
+  font-variant-numeric: tabular-nums;
+}
+.channel__stats span {
+  display: block;
+  margin-top: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 .channel--rev .channel__info { order: 2; }
 .channel--rev .channel__visual { order: 1; }
 .channel__tag {
@@ -589,24 +626,34 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   border-top: 1px solid var(--line);
   padding-top: 1.6rem;
 }
+/* фото-заполнитель колонки визуала: добирает высоту до нижней линии текста */
 .channel__photo {
+  position: relative;
+  overflow: clip;
+  flex: 1 1 auto;
+  min-height: 220px;
   margin-top: 2rem;
-}
-.channel__photo img {
-  width: 100%;
-  height: auto; /* сбрасываем HTML-атрибут height, иначе aspect-ratio не работает */
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  filter: saturate(0.88);
   border: 1px solid var(--line);
 }
+.channel__photo img {
+  position: absolute;
+  top: -8%; left: 0;
+  width: 100%; height: 116%;
+  object-fit: cover;
+  filter: saturate(0.88);
+  will-change: transform;
+}
 .channel__photo figcaption {
-  margin-top: 0.7rem;
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  padding: 2rem 1.1rem 0.85rem;
+  background: linear-gradient(180deg, transparent, rgba(8, 9, 11, 0.78));
   font-family: var(--mono);
   font-size: 0.66rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--faint);
+  color: #cfd6d1;
 }
 
 /* ── ТВ-мокап ── */
@@ -696,6 +743,7 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
 
 /* ── телефон-мокап ── */
 .phone-stage {
+  height: 100%; /* стенд занимает всю колонку — низ совпадает с текстом */
   border: 1px solid var(--line);
   background:
     radial-gradient(70% 80% at 50% 100%, rgba(9, 186, 129, 0.06), transparent 60%),
@@ -706,6 +754,7 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   padding: clamp(1.8rem, 3vw, 3rem) 1rem;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .phone {
   width: min(320px, 82vw);
@@ -808,6 +857,9 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
 /* ── браузер-мокап ── */
 .browser {
   width: 100%;
+  height: 100%; /* заполняет колонку до нижней линии текста */
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--line2);
   border-radius: 12px;
   overflow: clip;
@@ -834,7 +886,12 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   letter-spacing: 0.08em;
   color: var(--faint);
 }
-.browser__body { padding: 2.2rem 2rem 2rem; }
+.browser__body {
+  padding: 2.2rem 2rem 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .browser__hero {
   border: 1px dashed rgba(9, 186, 129, 0.4);
   background: rgba(9, 186, 129, 0.05);
@@ -842,8 +899,10 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   gap: 0.6rem;
   margin-bottom: 1.2rem;
+  flex: 1;
 }
 .browser__hero b { font-size: 1.25rem; font-weight: 560; }
 .browser__hero span { color: var(--muted); font-size: 0.85rem; }
@@ -1376,6 +1435,12 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   /* пятую карточку — на всю ширину, иначе пустая полуячейка светится фоном сетки */
   .wcard:nth-child(5) { grid-column: span 6; }
 
+  /* в одноколоночной раскладке фото-заполнители получают фиксированные пропорции */
+  .aphoto--fill { flex: none; aspect-ratio: 3 / 2; min-height: 0; margin-top: 1.6rem; }
+  .channel__photo { flex: none; aspect-ratio: 16 / 10; min-height: 0; }
+  .phone-stage { height: auto; }
+  .channel__info .channel__stats { margin-top: 1.8rem; }
+
   /* шапка: полное меню не влезает уже на планшетах — бургер с 1080px */
   .nav__links, .nav__cta { display: none; }
   .nav__burger { display: flex; margin-left: auto; }
@@ -1474,5 +1539,5 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   .dash__chart i { transform: scaleY(1); transition: none; }
   .jstep, .js .jstep { opacity: 1; transform: none; }
   .tv__slide { transition: none; }
-  .aphoto img, .strip__item img { height: 100%; top: 0; }
+  .aphoto img, .strip__item img, .channel__photo img { height: 100%; top: 0; }
 }
