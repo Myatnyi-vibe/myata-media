@@ -483,7 +483,9 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   overflow: clip;
   aspect-ratio: 3 / 2;
 }
-.aphoto--main { aspect-ratio: 4 / 3; }
+/* в двухколоночной сетке высоту диктует колонка текста, а не пропорция:
+   aspect-ratio при растянутой высоте пересчитал бы ширину и наехал на текст */
+.aphoto--main { aspect-ratio: auto; }
 /* фото-заполнитель: добирает свободную высоту колонки до общей нижней линии */
 .aphoto--fill {
   aspect-ratio: auto;
@@ -1436,6 +1438,7 @@ body.menu-open .nav__burger span:nth-child(2) { transform: translateY(-4.25px) r
   .wcard:nth-child(5) { grid-column: span 6; }
 
   /* в одноколоночной раскладке фото-заполнители получают фиксированные пропорции */
+  .aphoto--main { aspect-ratio: 4 / 3; }
   .aphoto--fill { flex: none; aspect-ratio: 3 / 2; min-height: 0; margin-top: 1.6rem; }
   .channel__photo { flex: none; aspect-ratio: 16 / 10; min-height: 0; }
   .phone-stage { height: auto; }
